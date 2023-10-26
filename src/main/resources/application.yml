@@ -1,0 +1,25 @@
+server:
+  port: 8082
+
+topic:
+  name: t.email.order
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  kafka:
+    consumer:
+      group-id: "default"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_CONFIG_SENDER}
+    password: ${EMAIL_CONFIG_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
