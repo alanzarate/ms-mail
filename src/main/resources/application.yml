@@ -5,14 +5,23 @@ topic:
   name: t.email.order
 
 spring:
+
   config:
     import: optional:file:.env[.properties]
+  datasource:
+    url: ${URL_DB_MS_CALENDAR:jdbc:postgresql://54.71.239.115:5432/calendar}
+    driver-class-name: org.postgresql.Driver
+    username: ${USERNAME_DB_MS_CALENDAR:postgres}
+    password: ${PASSWORD_DB_MS_CALENDAR:sucha1234}
+  jpa:
+    hibernate:
+      ddl-auto: ${ACTION_DB_MS_CALENDAR:update}
   kafka:
     consumer:
       group-id: "default"
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: localhost  #smtp.gmail.com
+    port: 1025 #587
     username: ${EMAIL_CONFIG_SENDER}
     password: ${EMAIL_CONFIG_PASSWORD}
     properties:

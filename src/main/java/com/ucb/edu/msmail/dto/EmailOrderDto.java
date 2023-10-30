@@ -6,6 +6,6 @@ import lombok.Value;
 @Data
 @Value
 public class EmailOrderDto {
-    String item;
-    Double amount;
+    String mail;
+    Integer eventId;
 }

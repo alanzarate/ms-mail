@@ -1,0 +1,208 @@
+<!DOCTYPE  html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones Académicas</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--GOOGLE FONTS-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">
+    <style>
+        body {
+          font-family: 'Roboto', sans-serif;
+          background-color: #f5f5f5;
+          color: #333;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+
+        .header {
+          background-color: #003366;
+          color: white;
+          padding: 20px;
+          text-align: center;
+        }
+
+        .header img {
+          height: auto;
+        }
+        .notification-item{
+            margin-left: 20px;
+        }
+
+        .user-header {
+          display: flex;
+          align-items: center;
+        }
+
+        .user-header span {
+          font-size: 20px;
+          color: yellow;
+          font-weight: bold;
+          margin-left: 10px;
+        }
+
+
+
+        .content {
+          display: flex;
+          justify-content: center;
+        }
+
+
+
+        .event-info {
+          color: #003366;
+          border: 1px solid #003366;
+          padding: 20px;
+          border-radius: 15px;
+          max-width: 50%;
+          width: 100%;
+          text-align: center;
+          box-shadow:
+                    0 0 0 3px #003366,
+                    0 0 0 10px #fff;
+          background-color: #fff;
+        }
+
+        .event-info h2 {
+          color: #003366;
+        }
+
+        .event-info p {
+          margin-bottom: 10px;
+        }
+        .event-info img{
+            max-width: 80%;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer{
+    padding:30px 0px;
+    font-family: 'Play', sans-serif;
+    text-align:center;
+    }
+
+    .footer .row{
+    width:100%;
+    margin:1% 0%;
+    padding:0.6% 0%;
+    color:gray;
+    font-size:0.8em;
+    }
+
+    .footer .row a{
+    text-decoration:none;
+    color:gray;
+    transition:0.5s;
+    }
+
+    .footer .row a:hover{
+    color:#fff;
+    }
+
+    .footer .row ul{
+    width:100%;
+    }
+
+    .footer .row ul li{
+    display:inline-block;
+    margin:0px 30px;
+    }
+
+    .footer .row a i{
+    font-size:2em;
+    margin:0% 1%;
+    }
+
+    @media (max-width:720px){
+        .event-info{
+            margin-top: 25px;
+            max-width: 100%;
+        }
+    .footer{
+    text-align:left;
+    padding:5%;
+    }
+    .footer .row ul li{
+    display:block;
+    margin:10px 0px;
+    text-align:left;
+    }
+    .footer .row a i{
+    margin:0% 3%;
+    }
+    }
+    </style>
+</head>
+<body>
+
+<!-- NEW TREATMENT -->
+<div class="header">
+    <div class="user-header">
+        <img src="https://lpz.ucb.edu.bo/wp-content/uploads/2021/04/logo-ucb-colores-nal.png" alt="Logo" width="100">
+        <div class="notification-item">
+            <h1>Notificaciones</h1>
+
+        </div>
+    </div>
+
+
+
+    <div id="event-info" class="content blue-box">
+        <div class="event-info">
+            <p th:utext="${message2}" ></p>
+            <p>Notificación desde <strong>"usuario"</strong></p>
+            <p><small>17 Oct, 10:36pm (hace 9 días)</small></p>
+            <h2>ASUNTO:${eventId}</h2>
+            <p>Un nuevo mensaje ha sido publicado por "usuario" para este envío:
+                <br>Aqui va la informacion del evento
+            </p>
+
+            <p><a href="#">Enlace para redirigir al evento</a></p>
+            <p>Este mensaje es una notificación automática.</p>
+            <img src="https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-breath-of-the-wild-2/3/38/Link2.png">
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer">
+            <div class="row">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-youtube"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+            </div>
+
+            <div class="row">
+                <ul>
+                    <li><a href="#">Sitio Académico</a></li>
+                    <li><a href="#">Otros </a></li>
+                    <li><a href="#">Propuesta academica</a></li>
+                    <li><a href="#">Terminos y condiciones</a></li>
+                    <li><a href="#">Carreras</a></li>
+                </ul>
+            </div>
+
+            <div class="row">
+                UNIVERSIDAD CATÓLICA BOLIVIANA Copyright © 2023 - Todos los derechos reservados
+            </div>
+        </div>
+    </footer>
+
+<h1>Greetings from myproject!</h1>
+<p th:text="${message}">Default message</p>
+<div style="background-color: blue; width: 100%; height: 100px">
+    aadasdasd
+</div>
+</body>
+</html>
