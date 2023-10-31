@@ -23,12 +23,13 @@ public class Consumer {
         this.emailService = emailService;
     }
 
-    @KafkaListener(topics = emailTopic, autoStartup = "false")
+    @KafkaListener(topics = emailTopic) // autoStartup = "false"
     public void consumeMessage(String message) throws Exception {
         log.info("message consumed {}", message);
 
         EmailOrderDto emailOrderDto = objectMapper.readValue(message, EmailOrderDto.class);
         //emailService.sendMailWithAttachment("alnzarate@gmail.com", String.format("Body %f", emailOrderDto.getAmount()), String.format("Subject %s", emailOrderDto.getItem()), null);
+        emailService.sendMailWithAttachmentAndHtml(emailOrderDto);
 
 
     }

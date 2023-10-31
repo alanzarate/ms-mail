@@ -19,6 +19,8 @@ import org.thymeleaf.context.Context;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,14 +95,12 @@ public class EmailService {
 
     public void sendEmailHtmlTwo(MultipartFile file) throws IOException {
         byte[] bu = file.getBytes();
-        String mess = getEvent();
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 
         try {
             Context context = new Context();
             context.setVariable("message","this is a message from variable");
-            context.setVariable("message2", mess);
             helper.setFrom("no.reply.ucb");
             helper.setTo("alnzarate@gmail.com");
             helper.setSubject("subject");
@@ -111,19 +111,24 @@ public class EmailService {
             // Handle exception
         }
     }
-    public String getEvent(Integer eventId) throws Exception{
-        EventEntity eve = eventRepository.findByEventId(eventId);
-        if(eve == null) throw new Exception("Any event founded with id");
+    public String getEvent(EventEntity eve) throws Exception{
         CategoryEntity cat = categoryRepository.findByCategoryId(eve.getCategoryId());
         if(cat == null) throw new Exception("Any category founded");
 
         String mailFormat = cat.getEmailFormat();
+        LocalDateTime init = eve.getInitialDate().toLocalDateTime();
+        LocalDateTime finalD = eve.getInitialDate().toLocalDateTime();
+        String[] months = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
         Map<String, Object> valores = new HashMap<>();
-        valores.put("nombreEvento", eve.getName());
-        valores.put("fechaInicioEvento", eve.getInitialDate().toString());
-        valores.put("horaInicioEvento", eve.getInitialDate().getTime());
-        valores.put("fechaFinEvento", "aqui no que pedo");
-        valores.put("horaFinEvento", "aqui tampoco");
+        valores.put("name", eve.getName());
+        valores.put("description", eve.getDescription());
+        String initString = init.getDayOfMonth() + " de "  +months[init.getMonth().getValue()-1] + " de "+init.getYear();
+        String finalString = finalD.getDayOfMonth() + " de "  +months[finalD.getMonth().getValue()-1] + " de "+finalD.getYear();
+
+        valores.put("initalDate",initString);
+        valores.put("finalDate", finalString);
+        valores.put("initialTime", init.getHour() + ":"+init.getMinute());
 
         String regex = "%\\{\\{(.*?)}}%";
 
@@ -134,25 +139,41 @@ public class EmailService {
 
         while (matcher.find()) {
             String key = matcher.group(1);
-            String value = valores.get(key).toString();
-            matcher.appendReplacement(resultado, Objects.requireNonNullElse(value, "______"));
+            if(valores.get(key) != null){
+                String value = valores.get(key).toString();
+                //matcher.appendReplacement(resultado, Objects.requireNonNullElse(value, "______"));
+                matcher.appendReplacement(resultado, value);
+            }else{
+                matcher.appendReplacement(resultado, "____");
+            }
+
         }
         matcher.appendTail(resultado);
 
-        return resultado.toString();
+        return String.valueOf(resultado);
     }
 
     public void sendMailWithAttachmentAndHtml(EmailOrderDto emailOrderDto) throws Exception {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
         try{
-            String mess = getEvent(emailOrderDto.getEventId());
+            EventEntity eve = eventRepository.findByEventId(emailOrderDto.getEventId());
+            if(eve == null) throw new Exception("Any event founded with id");
+            String mess = getEvent(eve);
             Context context = new Context();
+            String newMess = mess.replace("\\n", "<br>");
+
             context.setVariable("message","this is a message from variable");
-            context.setVariable("message2", mess);
+            context.setVariable("message2", newMess);
+            context.setVariable("title", eve.getName());
             helper.setFrom("no.reply.ucb");
-            helper.setTo("alnzarate@gmail.com");
-            helper.setSubject("subject");
+            helper.setTo(emailOrderDto.getMail().trim());
+            helper.setSubject(eve.getName());
+            String htmlContent = templateEngine.process("second-template", context);
+            helper.setText(htmlContent, true);
+            javaMailSender.send(mimeMessage);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
         }
     }
 

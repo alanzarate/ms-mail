@@ -1,6 +1,7 @@
 package com.ucb.edu.msmail.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ucb.edu.msmail.dto.EmailOrderDto;
 import com.ucb.edu.msmail.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,19 @@ public class TestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/4")
+    public ResponseEntity<?> sendEmailWithAtt2(
+            @RequestBody EmailOrderDto body
+            ) throws Exception{
+        try{
+
+            emailService.sendMailWithAttachmentAndHtml(body);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
 
 
